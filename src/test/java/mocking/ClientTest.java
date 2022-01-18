@@ -4,11 +4,6 @@ package mocking;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.List;
 
 public class ClientTest {
 
@@ -26,7 +21,7 @@ public class ClientTest {
         // TODO: Spy the Client class here instead of calling new
         spyClient = new Client();
 
-        // TODO: Use Mockito.doReturn to tell the client to return the mock service when the factory method is called
+        // TODO: Use Mockito.when/thenReturn or Mockito.doReturn/when to tell the client to return the mock service when the factory method is called
     }
 
     /**
@@ -37,7 +32,7 @@ public class ClientTest {
     @Test
     public void testConvertValue() {
         String expected = "70";
-        // TODO: Use Mockito.doReturn to tell the service to return 2 for input 35
+        // TODO: Use Mockito.when/thenReturn or Mockito.doReturn/when to tell the service to return 2 for input 35 when it's getDecimalDigitCount(int) method is called
 
         String actual = spyClient.convertValue(35);
         Assertions.assertEquals(expected, actual);
@@ -52,9 +47,10 @@ public class ClientTest {
     @Test
     public void testCreateFormattedStringsWithAnswer() {
 
-        // TODO: create a new Answer here that checks the values passed into the mockService
+        // TODO: create a new Answer here (as an anonymous inner class) that checks the parameter passed into the mockService's processList(List<String>) method and asserts that the parameter is not null
 
         // TODO: use Mockito.doAnswer to run your answer code whenever mockService.processList is called
+        // Hint: Use Mockito.anyList() as the parameter to processList
         String input = "Have a nice day";
         spyClient.createFormattedStrings(input);
 
