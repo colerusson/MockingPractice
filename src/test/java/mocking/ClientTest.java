@@ -4,6 +4,9 @@ package mocking;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class ClientTest {
 
@@ -16,12 +19,13 @@ public class ClientTest {
     @BeforeEach
     public void setup() {
         // TODO: Mock the Service class here instead of calling new
-        mockService = new Service();
+        mockService = Mockito.mock(Service.class);
 
         // TODO: Spy the Client class here instead of calling new
-        spyClient = new Client();
+        spyClient = Mockito.spy(new Client());
 
         // TODO: Use Mockito.when/thenReturn or Mockito.doReturn/when to tell the client to return the mock service when the factory method is called
+        Mockito.doReturn(mockService).when(spyClient).createService();
     }
 
     /**
@@ -33,7 +37,7 @@ public class ClientTest {
     public void testConvertValue() {
         String expected = "70";
         // TODO: Use Mockito.when/thenReturn or Mockito.doReturn/when to tell the service to return 2 for input 35 when it's getDecimalDigitCount(int) method is called
-
+        Mockito.when(mockService.getDecimalDigitCount(35)).thenReturn(2);
         String actual = spyClient.convertValue(35);
         Assertions.assertEquals(expected, actual);
     }
@@ -48,13 +52,20 @@ public class ClientTest {
     public void testCreateFormattedStringsWithAnswer() {
 
         // TODO: create a new Answer here (as an anonymous inner class) that checks the parameter passed into the mockService's processList(List<String>) method and asserts that the parameter is not null
+        Mockito.doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                Assertions.assertNotNull(invocation.getArgument(0));
+                return null;
+            }
+        }).when(mockService).processList(Mockito.anyList());
 
         // TODO: use Mockito.doAnswer to run your answer code whenever mockService.processList is called
-        // Hint: Use Mockito.anyList() as the parameter to processList
         String input = "Have a nice day";
         spyClient.createFormattedStrings(input);
 
         // TODO: use Mockito.verify to ensure that mockService.processList is called
+        Mockito.verify(mockService).processList(Mockito.anyList());
     }
 
 }
